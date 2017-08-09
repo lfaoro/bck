@@ -1,0 +1,26 @@
+origins: 
+  - "$HOME/.tether"
+  - "$HOME/.ssh"
+  - "$HOME/dotfiles"
+  - "~/.pwd"
+  - "$HOME/.fadsfsad"
+
+destinations: 
+  - "/tmp/.tst"
+  - "/tmp/.tst1"
+  - "/tmp/.tst2"
+  - "/tmp/.tst3"
+  - "/tmp/.tst5"
+  - "/tmp/.tst4"
+  - "/tmp/fasdfadsf"
+
+options:
+  - encrypt
+  - zip
+
+# check list of destinations
+# if none available, exit
+# option to zip
+# option to encrypt
+# restore puts stuff back where it got them from
+# bck -encrypt -zip
