@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	"github.com/sirupsen/logrus"
 )
@@ -16,7 +17,7 @@ func init() {
 	log.Level = logrus.InfoLevel
 
 	// dev mode
-	*debug = false
+	*debug = true
 	// dev mode
 
 	if *debug {
@@ -27,6 +28,12 @@ func init() {
 func main() {
 
 	settings := NewSettings()
+
+	if err := Restore(settings); err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(0)
 
 	err := Sync(settings)
 	if err != nil {

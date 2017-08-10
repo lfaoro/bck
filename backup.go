@@ -86,13 +86,12 @@ DEST:
 // Sync will sync the data from origins to destionations.
 func Sync(s *Settings) error {
 
-	// check if rsync command is available
-	rsync, err := exec.LookPath("rsync")
+	rsync, err := checkBin("rsync")
 	if err != nil {
 		return err
 	}
 
-	flags := "--copy-links --recursive --update --force --progress"
+	flags := "--relative --copy-links --recursive --update --force --progress"
 	origins := fmt.Sprintf("%s", strings.Join(s.Origins, " "))
 
 	wg := &sync.WaitGroup{}
@@ -104,6 +103,43 @@ func Sync(s *Settings) error {
 	wg.Wait()
 
 	return nil
+
+}
+
+// Restore recovers data from the destionations and places it back into
+// the origins.
+func Restore(s *Settings) error {
+
+	rsync, err := checkBin("rsync")
+	if err != nil {
+		return err
+	}
+
+	flags := "--copy-links --recursive --update --force --progress"
+
+	var input string
+	for _, o := range s.Origins {
+		str := fmt.Sprintf("%s%s/", s.Destinations[0], o)
+		log.Println(str)
+
+		input = fmt.Sprintf("%s %s %s %s", rsync, flags, str, o)
+
+	}
+
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	execCmd(input, wg)
+
+	return nil
+}
+
+func checkBin(bin string) (string, error) {
+	// check if rsync command is available
+	bin, err := exec.LookPath(bin)
+	if err != nil {
+		return "", err
+	}
+	return bin, nil
 }
 
 func execCmd(input string, wg *sync.WaitGroup) {
