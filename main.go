@@ -2,14 +2,14 @@ package main
 
 import (
 	"flag"
-	"os"
 
 	"github.com/sirupsen/logrus"
 )
 
 var (
-	log   = logrus.New()
-	debug = flag.Bool("debug", false, "activate debug mode.")
+	log     = logrus.New()
+	debug   = flag.Bool("debug", false, "activate debug mode.")
+	restore = flag.Bool("restore", false, "restore files in destinations to their origins.")
 )
 
 func init() {
@@ -29,14 +29,14 @@ func main() {
 
 	settings := NewSettings()
 
-	if err := Restore(settings); err != nil {
-		log.Fatal(err)
-	}
-
-	os.Exit(0)
-
 	err := Sync(settings)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if *restore {
+		if err := Restore(settings); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

@@ -1,12 +1,12 @@
 origins: 
   # - "$HOME/Library/Preferences/com.viscosityvpn.Viscosity.plist"
-  - "$HOME/dotfiles/misc"
-  - "$HOME/.tether"
+  - "/tmp/origins/a"
+  - "/tmp/origins/b"
 
 
 destinations: 
-  - "/tmp/.tst"
-  - "/tmp/.tst1"
+  - "/tmp/destinations/1"
+  - "/tmp/destinations/2"
 
 
 options:
@@ -21,3 +21,4 @@ options:
 # bck -encrypt -zip
 
 # sanity check don't check origins for restore
+# add mkdir check to destinations
