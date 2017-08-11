@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	log   = logrus.New()
-	debug = flag.Bool("debug", false, "activate debug mode.")
+	log     = logrus.New()
+	debug   = flag.Bool("debug", false, "activate debug mode.")
+	restore = flag.Bool("restore", false, "restore files in destinations to their origins.")
 )
 
 func init() {
@@ -16,7 +17,7 @@ func init() {
 	log.Level = logrus.InfoLevel
 
 	// dev mode
-	*debug = false
+	*debug = true
 	// dev mode
 
 	if *debug {
@@ -31,5 +32,11 @@ func main() {
 	err := Sync(settings)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if *restore {
+		if err := Restore(settings); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

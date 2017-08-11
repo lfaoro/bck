@@ -27,6 +27,49 @@ func NewSettings() *Settings {
 	return s
 }
 
+// Sync will sync the data from origins to destionations.
+func Sync(s *Settings) error {
+
+	rsync := mustHave("rsync")
+
+	flags := "--relative --copy-links --recursive --update --force --progress"
+	origins := fmt.Sprintf("%s", strings.Join(s.Origins, " "))
+
+	wg := &sync.WaitGroup{}
+	for _, dst := range s.Destinations {
+		input := fmt.Sprintf("%s %s %s %s", rsync, flags, origins, dst)
+		wg.Add(1)
+		go execCmd(input, wg)
+	}
+	wg.Wait()
+
+	return nil
+
+}
+
+// Restore recovers data from the destionations and places it back into
+// the origins.
+func Restore(s *Settings) error {
+
+	rsync := mustHave("rsync")
+
+	flags := "--copy-links --recursive --update --force --progress"
+
+	wg := &sync.WaitGroup{}
+	var input string
+	for _, o := range s.Origins {
+		str := fmt.Sprintf("%s%s/", s.Destinations[0], o)
+		input = fmt.Sprintf("%s %s %s %s", rsync, flags, str, o)
+
+		wg.Add(1)
+		go execCmd(input, wg)
+	}
+
+	wg.Wait()
+
+	return nil
+}
+
 func (s *Settings) parseSettings() {
 	file, err := os.Open(".backup.yml")
 	if err != nil {
@@ -83,27 +126,14 @@ DEST:
 	}
 }
 
-// Sync will sync the data from origins to destionations.
-func Sync(s *Settings) error {
-
+func mustHave(bin string) string {
 	// check if rsync command is available
-	rsync, err := exec.LookPath("rsync")
+	bin, err := exec.LookPath(bin)
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 
-	flags := "--copy-links --recursive --update --force --progress"
-	origins := fmt.Sprintf("%s", strings.Join(s.Origins, " "))
-
-	wg := &sync.WaitGroup{}
-	for _, dst := range s.Destinations {
-		input := fmt.Sprintf("%s %s %s %s", rsync, flags, origins, dst)
-		wg.Add(1)
-		go execCmd(input, wg)
-	}
-	wg.Wait()
-
-	return nil
+	return bin
 }
 
 func execCmd(input string, wg *sync.WaitGroup) {

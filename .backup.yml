@@ -1,18 +1,13 @@
 origins: 
-  - "$HOME/.tether"
-  - "$HOME/.ssh"
-  - "$HOME/dotfiles"
-  - "~/.pwd"
-  - "$HOME/.fadsfsad"
+  # - "$HOME/Library/Preferences/com.viscosityvpn.Viscosity.plist"
+  - "/tmp/origins/a"
+  - "/tmp/origins/b"
+
 
 destinations: 
-  - "/tmp/.tst"
-  - "/tmp/.tst1"
-  - "/tmp/.tst2"
-  - "/tmp/.tst3"
-  - "/tmp/.tst5"
-  - "/tmp/.tst4"
-  - "/tmp/fasdfadsf"
+  - "/tmp/destinations/1"
+  - "/tmp/destinations/2"
+
 
 options:
   - encrypt
@@ -24,3 +19,6 @@ options:
 # option to encrypt
 # restore puts stuff back where it got them from
 # bck -encrypt -zip
+
+# sanity check don't check origins for restore
+# add mkdir check to destinations
