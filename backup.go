@@ -12,9 +12,9 @@ import (
 )
 
 type Settings struct {
-	Origins      []string
-	Destinations []string
-	Options      []string
+	Origins      []string `json:"origins,omitempty"`
+	Destinations []string `json:"destinations,omitempty"`
+	Options      []string `json:"options,omitempty"`
 }
 
 func NewSettings() *Settings {
