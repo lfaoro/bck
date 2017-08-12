@@ -1,0 +1,22 @@
+---
+origins:
+  - $HOME/Library/Preferences/com.viscosityvpn.Viscosity.plist
+  - $HOME/.ssh
+  - $HOME/dotfiles
+  - $HOME/.iTerm
+  - $HOME/exercism
+  - $HOME/.doctlcfg
+  - $HOME/.gnupg
+  - $HOME/.pwd
+
+
+destinations:
+  - /tmp/destinations/.bck
+  # - /keybase/private/lfaoro/backup
+  # - /Volumes/iData/backup
+  # - /Volumes/iBackup/backup
+
+
+options:
+  - encrypt
+  - zip
