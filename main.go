@@ -7,9 +7,10 @@ import (
 )
 
 var (
-	log     = logrus.New()
-	debug   = flag.Bool("debug", false, "activate debug mode.")
-	restore = flag.Bool("restore", false, "restore files in destinations to their origins.")
+	log          = logrus.New()
+	debug        = flag.Bool("debug", false, "activate debug mode.")
+	restore      = flag.Bool("restore", false, "restore files in destinations to their origins.")
+	settingsFlag = flag.String("settings", "$HOME/.backup.yml", "path to the settings file.")
 )
 
 func init() {
@@ -28,7 +29,6 @@ func init() {
 func main() {
 
 	settings := NewSettings()
-
 	err := Sync(settings)
 	if err != nil {
 		log.Fatal(err)
