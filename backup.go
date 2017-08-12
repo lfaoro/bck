@@ -11,12 +11,15 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+// Settings stores lists of elements parsed from a manifest.
 type Settings struct {
 	Origins      []string `json:"origins,omitempty"`
 	Destinations []string `json:"destinations,omitempty"`
 	Options      []string `json:"options,omitempty"`
 }
 
+// NewSettings verifies that all settings parsed are correct and discards
+// invalid ones before returning a sanitized object.
 func NewSettings() *Settings {
 
 	s := &Settings{}
