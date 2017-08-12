@@ -71,7 +71,8 @@ func Restore(s *Settings) error {
 }
 
 func (s *Settings) parseSettings() {
-	file, err := os.Open(".backup.yml")
+	str := os.ExpandEnv(*settingsFlag)
+	file, err := os.Open(str)
 	if err != nil {
 		log.Fatalf("unable to find \".backup.yml\" %s", err)
 	}
@@ -111,10 +112,12 @@ DEST:
 		str := os.ExpandEnv(o)
 		_, err := os.Stat(str)
 		if os.IsNotExist(err) {
-			log.Errorf("excluding destination | %s", str)
-			log.Debugf("removing elem: %s", s.Destinations[i])
-			s.Destinations = append(s.Destinations[:i], s.Destinations[i+1:]...)
-			goto DEST
+			if err := createDir(str); err != nil {
+				log.Errorf("excluding destination | %s", str)
+				log.Debugf("removing elem: %s", s.Destinations[i])
+				s.Destinations = append(s.Destinations[:i], s.Destinations[i+1:]...)
+				goto DEST
+			}
 		}
 	}
 
@@ -124,6 +127,14 @@ DEST:
 	if len(s.Destinations) == 0 {
 		log.Fatal("no Destinations exist")
 	}
+}
+
+func createDir(dir string) error {
+	log.Infof("creating directory %v", dir)
+	if err := os.MkdirAll(dir, os.FileMode(0755)); err != nil {
+		return err
+	}
+	return nil
 }
 
 func mustHave(bin string) string {
